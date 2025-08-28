@@ -56,7 +56,7 @@ O projeto tem como finalidade:
 1. Clone o repositório:
    ```bash
    git clone https://github.com/cac-souza/controle_produtividade_v3.git
-cd controle_produtividade_v3
+   cd controle_produtividade_v3
 2. Instale as dependências:
    ```bash
    pip install -r requirements.txt
