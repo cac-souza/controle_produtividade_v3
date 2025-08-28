@@ -6,8 +6,10 @@ from datetime import datetime, timedelta
 import streamlit as st
 
 # no topo de visao_geral.py
-from modelos import Tarefa, RegistroDePontuacao, MetaMensal, MetaMensalRegistro
+from modelos import Tarefa, RegistroDePontuacao, MetaMensal, MetaMensalRegistro, Usuario
 from auth import exigir_login
+from helpers import usuarios_visiveis
+
 
 # -------------------------
 # Função utilitária
@@ -38,12 +40,41 @@ from dateutil.relativedelta import relativedelta
 def pagina_visao_geral(session):
     """Exibe visão geral de produtividade do usuário logado."""
     exigir_login()
-    st.title("📊 Sua Produtividade")
+    st.title("📊 Sua Pontuação")
+
+    # 🔐 Seleção de usuário com controle de acesso
+    nivel_acesso = st.session_state.get("papel", "usuario")
+    usuario_logado = session.query(Usuario).get(st.session_state.usuario_id)
+
+    usuarios = usuarios_visiveis(usuario_logado, session)
+    if not usuarios:
+        st.warning("Nenhum usuário disponível para consulta.")
+        st.stop()
+
+    nomes_usuarios = {u.id: u.nome for u in usuarios}
+    usuario_selecionado_id = st.session_state.usuario_id
+
+    if nivel_acesso == "usuario":
+        st.write(f"👤 Consultando pontuação de: **{st.session_state.usuario}**")
+    else:
+        st.write("👥 Você pode consultar a pontuação de membros da sua equipe.")
+        liberar_troca = st.checkbox("🔓 Liberar troca de usuário")
+
+        if liberar_troca and nomes_usuarios:
+            usuario_selecionado_id = st.selectbox(
+                "Selecionar usuário",
+                options=list(nomes_usuarios.keys()),
+                format_func=lambda uid: nomes_usuarios[uid]
+            )
+        else:
+            st.write(f"👤 Consultando pontuação de: **{st.session_state.usuario}**")
+
+    usuario_id = usuario_selecionado_id
 
     # Parâmetros de tempo e usuário
     hoje = datetime.today()
     inicio_periodo = hoje.replace(day=1) - timedelta(days=365)
-    usuario_id = st.session_state.usuario_id
+    usuario_id = usuario_selecionado_id
 
     # Consulta aos registros de pontuação
     registros = session.query(RegistroDePontuacao).filter(
@@ -122,8 +153,8 @@ def pagina_visao_geral(session):
     # Conteúdo principal
     # -------------------------
     if df_geral.empty:
-        st.info("Ainda não há dados suficientes para exibir sua produtividade nos últimos 12 meses.")
-        st.image("https://i.imgur.com/3ZQ3Z9F.png", caption="Produtividade em construção...")
+        st.info("Ainda não há dados suficientes para exibir sua pontução nos últimos 12 meses.")
+        st.image("https://i.imgur.com/3ZQ3Z9F.png", caption="Pontuação em construção...")
         return
 
     st.subheader("📅 Pontos por mês")
@@ -139,7 +170,7 @@ def pagina_visao_geral(session):
         color=alt.value("steelblue"),
         tooltip=["mes", "valor_realizado"]
     ).properties(
-        title="📈 Produtividade Mensal"
+        title="📈 Pontuação Mensal"
     )
 
     linha_minima = alt.Chart(grafico_df).mark_line(color="red", strokeDash=[5, 5]).encode(

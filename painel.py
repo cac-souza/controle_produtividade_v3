@@ -19,6 +19,8 @@ from helpers import usuarios_visiveis   # ✅ Agora vem do módulo utilitário
 from visao_geral import pagina_visao_geral
 
 
+
+
 # -------------------------------
 # ⚙️ CONFIGURAÇÃO
 # -------------------------------
@@ -164,18 +166,18 @@ if papel == "admin":
 PERMISSOES = {
     "admin": [
         "Visão Geral", "Cadastrar Produtividade", "Consulta de Pontuação", "Perda de Pontos",
-        "Relatórios", "Cadastro de Usuários", "Gerenciar Usuários", "Gerenciar Equipes"
+        "Editar Tarefas", "Relatórios", "Cadastro de Usuários", "Gerenciar Usuários", "Gerenciar Equipes"
     ],
     "gestor": [
         "Visão Geral", "Cadastrar Produtividade", "Consulta de Pontuação", "Perda de Pontos",
-        "Relatórios", "Cadastro de Usuários", "Gerenciar Usuários", "Gerenciar Equipes"
+        "Editar Tarefas", "Relatórios", "Cadastro de Usuários", "Gerenciar Usuários", "Gerenciar Equipes"
     ],
     "lider": [
         "Visão Geral", "Cadastrar Produtividade", "Consulta de Pontuação", "Perda de Pontos",
-        "Cadastro de Usuários", "Gerenciar Usuários"
+        "Editar Tarefas", "Cadastro de Usuários", "Gerenciar Usuários"
     ],
     "fiscal": [
-        "Visão Geral", "Cadastrar Produtividade", "Consulta de Pontuação", "Perda de Pontos"
+        "Visão Geral", "Cadastrar Produtividade", "Consulta de Pontuação", "Editar Tarefas", "Perda de Pontos"
     ]
 }
 PERMISSOES["chefe"] = PERMISSOES["lider"]
@@ -212,8 +214,8 @@ def nivel_por_papel(papel: str) -> int:
 # -------------------------------
 if aba == "Visão Geral":
     exigir_login()
-    st.subheader("📊 Painel de Visão Geral")
-    st.write("Aqui você pode mostrar gráficos e indicadores principais.")
+   # st.subheader("📊 Painel de Visão Geral")
+   # st.write("Aqui você pode mostrar gráficos e indicadores principais.")
 
     # chamada para a página nova
     pagina_visao_geral(session)
@@ -231,6 +233,11 @@ elif aba == "Consulta de Pontuação":
     pagina_consulta_pontuacao(session)
 
 
+elif aba == "Editar Tarefas":
+    from edicao_tarefas import pagina_edicao_tarefas
+    pagina_edicao_tarefas(session)
+
+
 elif aba == "Projeção de Expiração de Pontos":
     from projecao_expiracao import pagina_projecao_expiracao
     pagina_projecao_expiracao(session)
@@ -240,6 +247,7 @@ elif aba == "Relatórios":
     exigir_login()
     st.subheader("📑 Relatórios")
     st.write("Geração e download de relatórios.")
+    st.write("EM CONSTRUÇÃO!!")
 
 
 elif aba == "Cadastro de Usuários":
@@ -260,6 +268,7 @@ elif aba == "Gerenciar Equipes":
 elif aba == "Perda de Pontos":
     from projecao_expiracao import pagina_projecao_expiracao
     pagina_projecao_expiracao(session)
+
 
 
 

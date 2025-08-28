@@ -519,16 +519,36 @@ def pagina_consulta_pontuacao(session):
     st.session_state.session = session
     st.title("📄 Consulta de Pontuação")
 
+    # 🔐 Seleção de usuário com controle de acesso
+    nivel_acesso = st.session_state.get("papel", "usuario")
     usuario_logado = session.query(Usuario).get(st.session_state.usuario_id)
+
     usuarios = usuarios_visiveis(usuario_logado, session)
     if not usuarios:
         st.warning("Nenhum usuário disponível para consulta.")
         st.stop()
 
-    opcoes = {u.nome: u.id for u in usuarios}
-    nome = st.selectbox("👤 Selecione o usuário:", list(opcoes.keys()))
-    usuario_id = opcoes[nome]
-    nome_fiscal = nome  # agora capturamos aqui, para PDF
+    nomes_usuarios = {u.id: u.nome for u in usuarios}
+    usuario_selecionado_id = st.session_state.usuario_id
+
+    if nivel_acesso == "usuario":
+        st.write(f"👤 Consultando pontuação de: **{st.session_state.usuario}**")
+    else:
+        st.write("👥 Você pode consultar pontuação de membros da sua equipe.")
+        liberar_troca = st.checkbox("🔓 Liberar troca de usuário")
+
+        if liberar_troca and nomes_usuarios:
+            usuario_selecionado_id = st.selectbox(
+                "Selecionar usuário",
+                options=list(nomes_usuarios.keys()),
+                format_func=lambda uid: nomes_usuarios[uid]
+            )
+        else:
+            st.write(f"👤 Consultando pontuação de: **{st.session_state.usuario}**")
+
+    usuario_id = usuario_selecionado_id
+    usuario_obj = session.query(Usuario).get(usuario_id)
+    nome_fiscal = usuario_obj.nome
 
     hoje = datetime.today().date()
     ano = st.selectbox("📅 Ano", list(range(hoje.year - 3, hoje.year + 1)), index=3)
