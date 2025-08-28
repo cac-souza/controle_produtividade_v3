@@ -49,14 +49,14 @@ O projeto tem como finalidade:
 | `auth.py`                    | Controle de login e verificação de permissões                            |
 | `helpers.py`                 | Funções auxiliares para filtragem de usuários visíveis                    |
 | `painel.py`                  | Página principal do sistema                                              |
-| `controle_produtividade.db` | Banco de dados local com os registros do sistema                         |
+| `controle_produtividade.db`  | Banco de dados local com os registros do sistema                         |
 
 ## 🚀 Como Executar
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/JudasRobo/Projeto-v3.git
-   cd Projeto-v3
+   git clone https://github.com/cac-souza/controle_produtividade_v3.git
+cd controle_produtividade_v3
 2. Instale as dependências:
    ```bash
    pip install -r requirements.txt
