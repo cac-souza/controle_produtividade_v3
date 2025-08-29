@@ -523,32 +523,40 @@ def pagina_consulta_pontuacao(session):
     nivel_acesso = st.session_state.get("papel", "usuario")
     usuario_logado = session.query(Usuario).get(st.session_state.usuario_id)
 
-    usuarios = usuarios_visiveis(usuario_logado, session)
-    if not usuarios:
-        st.warning("Nenhum usuário disponível para consulta.")
-        st.stop()
+    # Se o usuário for fiscal, não mostra troca nem lista
+    if nivel_acesso == "fiscal":
+        usuario_id = st.session_state.usuario_id
+        usuario_obj = usuario_logado
+        nome_fiscal = usuario_obj.nome
+        st.write(f"👤 Consultando pontuação de: **{usuario_obj.nome}**")
 
-    nomes_usuarios = {u.id: u.nome for u in usuarios}
-    usuario_selecionado_id = st.session_state.usuario_id
-
-    if nivel_acesso == "usuario":
-        st.write(f"👤 Consultando pontuação de: **{st.session_state.usuario}**")
     else:
-        st.write("👥 Você pode consultar pontuação de membros da sua equipe.")
-        liberar_troca = st.checkbox("🔓 Liberar troca de usuário")
+        usuarios = usuarios_visiveis(usuario_logado, session)
+        if not usuarios:
+            st.warning("Nenhum usuário disponível para consulta.")
+            st.stop()
 
-        if liberar_troca and nomes_usuarios:
-            usuario_selecionado_id = st.selectbox(
-                "Selecionar usuário",
-                options=list(nomes_usuarios.keys()),
-                format_func=lambda uid: nomes_usuarios[uid]
-            )
+        nomes_usuarios = {u.id: u.nome for u in usuarios}
+        usuario_selecionado_id = st.session_state.usuario_id
+
+        if nivel_acesso == "usuario":
+            st.write(f"👤 Consultando pontuação de: **{usuario_logado.nome}**")
         else:
-            st.write(f"👤 Consultando pontuação de: **{st.session_state.usuario}**")
+            st.write("👥 Você pode consultar pontuação de membros da sua equipe.")
+            liberar_troca = st.checkbox("🔓 Liberar troca de usuário")
 
-    usuario_id = usuario_selecionado_id
-    usuario_obj = session.query(Usuario).get(usuario_id)
-    nome_fiscal = usuario_obj.nome
+            if liberar_troca and nomes_usuarios:
+                usuario_selecionado_id = st.selectbox(
+                    "Selecionar usuário",
+                    options=list(nomes_usuarios.keys()),
+                    format_func=lambda uid: nomes_usuarios[uid]
+                )
+            else:
+                st.write(f"👤 Consultando pontuação de: **{usuario_logado.nome}**")
+
+        usuario_id = usuario_selecionado_id
+        usuario_obj = session.query(Usuario).get(usuario_id)
+        nome_fiscal = usuario_obj.nome
 
     hoje = datetime.today().date()
     ano = st.selectbox("📅 Ano", list(range(hoje.year - 3, hoje.year + 1)), index=3)

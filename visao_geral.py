@@ -46,18 +46,20 @@ def pagina_visao_geral(session):
     nivel_acesso = st.session_state.get("papel", "usuario")
     usuario_logado = session.query(Usuario).get(st.session_state.usuario_id)
 
-    usuarios = usuarios_visiveis(usuario_logado, session)
-    if not usuarios:
-        st.warning("Nenhum usuário disponível para consulta.")
-        st.stop()
-
-    nomes_usuarios = {u.id: u.nome for u in usuarios}
+    # Define usuário padrão
     usuario_selecionado_id = st.session_state.usuario_id
 
-    if nivel_acesso == "usuario":
-        st.write(f"👤 Consultando pontuação de: **{st.session_state.usuario}**")
+    if nivel_acesso in ["fiscal", "usuario"]:
+        st.write(f"👤 Consultando pontuação de: **{usuario_logado.nome}**")
     else:
         st.write("👥 Você pode consultar a pontuação de membros da sua equipe.")
+        usuarios = usuarios_visiveis(usuario_logado, session)
+
+        if not usuarios:
+            st.warning("Nenhum usuário disponível para consulta.")
+            st.stop()
+
+        nomes_usuarios = {u.id: u.nome for u in usuarios}
         liberar_troca = st.checkbox("🔓 Liberar troca de usuário")
 
         if liberar_troca and nomes_usuarios:
@@ -67,14 +69,12 @@ def pagina_visao_geral(session):
                 format_func=lambda uid: nomes_usuarios[uid]
             )
         else:
-            st.write(f"👤 Consultando pontuação de: **{st.session_state.usuario}**")
-
-    usuario_id = usuario_selecionado_id
+            st.write(f"👤 Consultando pontuação de: **{usuario_logado.nome}**")
 
     # Parâmetros de tempo e usuário
+    usuario_id = usuario_selecionado_id
     hoje = datetime.today()
     inicio_periodo = hoje.replace(day=1) - timedelta(days=365)
-    usuario_id = usuario_selecionado_id
 
     # Consulta aos registros de pontuação
     registros = session.query(RegistroDePontuacao).filter(

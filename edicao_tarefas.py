@@ -41,32 +41,37 @@ TABELA_TAREFAS_FIXA = [
 def pagina_edicao_tarefas(session):
     st.title("Gerenciar Tarefas Registradas")
 
-    # 🔐 Seleção de usuário
-    nivel_acesso = st.session_state.get("papel", "usuario")  # ← ajusta conforme seu controle de acesso
+    # 🔐 Seleção de usuário com controle de acesso
+    nivel_acesso = st.session_state.get("papel", "usuario")
     usuario_logado = session.query(Usuario).get(st.session_state.usuario_id)
-    usuarios_visiveis_ao_logado = usuarios_visiveis(usuario_logado, session)
-    nomes_usuarios = {u.id: u.nome for u in usuarios_visiveis_ao_logado}
 
-    usuario_selecionado_id = st.session_state.usuario_id
-    if nivel_acesso == "usuario":
-        st.write(f"👤 Gerenciar Tarefas Registradas para: **{st.session_state.usuario}**")
+    # Se o usuário for fiscal, não mostra troca nem checkbox
+    if nivel_acesso == "fiscal":
+        usuario_selecionado_id = st.session_state.usuario_id
+        st.write(f"👤 Gerenciar Tarefas Registradas para: **{usuario_logado.nome}**")
+
     else:
-        st.write("👥 Você pode registrar gerenciar taregas para membros da sua equipe.")
+        usuarios_visiveis_ao_logado = usuarios_visiveis(usuario_logado, session)
+        nomes_usuarios = {u.id: u.nome for u in usuarios_visiveis_ao_logado}
 
-        if nivel_acesso != "fiscal":
+        usuario_selecionado_id = st.session_state.usuario_id
+
+        if nivel_acesso == "usuario":
+            st.write(f"👤 Gerenciar Tarefas Registradas para: **{usuario_logado.nome}**")
+        else:
+            st.write("👥 Você pode gerenciar tarefas para membros da sua equipe.")
             liberar_troca = st.checkbox("🔓 Liberar troca de usuário")
-        else:
-            liberar_troca = False
 
-        if liberar_troca and nomes_usuarios:
-            usuario_selecionado_id = st.selectbox(
-                "Selecionar usuário",
-                options=list(nomes_usuarios.keys()),
-                format_func=lambda uid: nomes_usuarios[uid]
-            )
-        else:
-            st.write(f"👤 Editando Tarefas Registradas para: **{st.session_state.usuario}**")
+            if liberar_troca and nomes_usuarios:
+                usuario_selecionado_id = st.selectbox(
+                    "Selecionar usuário",
+                    options=list(nomes_usuarios.keys()),
+                    format_func=lambda uid: nomes_usuarios[uid]
+                )
+            else:
+                st.write(f"👤 Editando Tarefas Registradas para: **{usuario_logado.nome}**")
 
+    # Define o usuário final e data atual
     usuario_logado = session.query(Usuario).get(usuario_selecionado_id)
     hoje = date.today()
 

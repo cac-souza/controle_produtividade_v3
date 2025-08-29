@@ -177,7 +177,7 @@ PERMISSOES = {
         "Editar Tarefas", "Cadastro de Usuários", "Gerenciar Usuários"
     ],
     "fiscal": [
-        "Visão Geral", "Cadastrar Produtividade", "Consulta de Pontuação", "Editar Tarefas", "Perda de Pontos"
+        "Visão Geral", "Cadastrar Produtividade", "Consulta de Pontuação", "Perda de Pontos", "Editar Tarefas"
     ]
 }
 PERMISSOES["chefe"] = PERMISSOES["lider"]

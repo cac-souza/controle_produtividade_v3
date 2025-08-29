@@ -12,16 +12,41 @@ def pagina_projecao_expiracao(session):
     exigir_login()
     st.title("📆 Projeção de Expiração de Pontos")
 
-    # Usuário logado
+    # 🔐 Seleção de usuário com controle de acesso
+    nivel_acesso = st.session_state.get("papel", "usuario")
     usuario_logado = session.query(Usuario).get(st.session_state.usuario_id)
-    usuarios = usuarios_visiveis(usuario_logado, session)
-    if not usuarios:
-        st.warning("Nenhum usuário disponível.")
-        st.stop()
 
-    opcoes = {u.nome: u.id for u in usuarios}
-    nome = st.selectbox("👤 Selecione o usuário:", list(opcoes.keys()))
-    usuario_id = opcoes[nome]
+    # Define usuário padrão
+    usuario_selecionado_id = st.session_state.usuario_id
+
+    if nivel_acesso == "fiscal":
+        st.write(f"👤 Consultando dados de: **{usuario_logado.nome}**")
+
+    elif nivel_acesso == "usuario":
+        st.write(f"👤 Consultando dados de: **{usuario_logado.nome}**")
+
+    else:
+        st.write("👥 Você pode consultar dados de membros da sua equipe.")
+        usuarios = usuarios_visiveis(usuario_logado, session)
+
+        if not usuarios:
+            st.warning("Nenhum usuário disponível.")
+            st.stop()
+
+        nomes_usuarios = {u.id: u.nome for u in usuarios}
+        liberar_troca = st.checkbox("🔓 Liberar troca de usuário")
+
+        if liberar_troca and nomes_usuarios:
+            usuario_selecionado_id = st.selectbox(
+                "Selecionar usuário",
+                options=list(nomes_usuarios.keys()),
+                format_func=lambda uid: nomes_usuarios[uid]
+            )
+        else:
+            st.write(f"👤 Consultando dados de: **{usuario_logado.nome}**")
+
+    # Define o usuário final
+    usuario_id = usuario_selecionado_id
 
     hoje = datetime.today().date()
     limite = hoje + relativedelta(months=3)

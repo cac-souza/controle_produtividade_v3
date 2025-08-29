@@ -22,17 +22,16 @@ def pagina_cadastrar_produtividade(session):
     usuarios_visiveis_lista = usuarios_visiveis(usuario_logado, session)
     nomes_usuarios = {u.id: u.nome for u in usuarios_visiveis_lista}
 
-    # 🔐 Seleção de usuário
+    # 🔐 Seleção de usuário com controle de acesso
+    nivel_acesso = st.session_state.get("papel", "usuario")
     usuario_selecionado_id = st.session_state.usuario_id
-    if nivel_acesso == "usuario":
+
+    if nivel_acesso == "fiscal":
         st.write(f"👤 Registrando produtividade para: **{st.session_state.usuario}**")
     else:
         st.write("👥 Você pode registrar produtividade para membros da sua equipe.")
 
-        if nivel_acesso != "fiscal":
-            liberar_troca = st.checkbox("🔓 Liberar troca de usuário")
-        else:
-            liberar_troca = False
+        liberar_troca = st.checkbox("🔓 Liberar troca de usuário")
 
         if liberar_troca and nomes_usuarios:
             usuario_selecionado_id = st.selectbox(
