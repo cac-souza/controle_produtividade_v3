@@ -191,6 +191,10 @@ def pagina_visao_geral(session):
         - 🟢 **Linha verde**: Meta ideal de produtividade (600 pontos)
         """)
 
+
+    st.markdown("---")
+    st.markdown("# Visão Acumulada dos Últimos 12 Meses")
+
     # Métricas totais
     total_ganhos = df_geral["valor_realizado"].sum()
     total_usados = df_geral["valor_usados"].sum()
