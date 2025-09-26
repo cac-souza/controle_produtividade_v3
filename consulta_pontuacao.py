@@ -14,7 +14,7 @@ from datetime import timedelta
 
 
 # ===================================================
-# 🔄 Carrega dados principais
+# 🔄 Carrega dados principais - 
 # ===================================================
 def carregar_dados(session, usuario_id, periodo):
     tarefas = session.query(Tarefa).filter_by(ativa=True).all()
@@ -779,6 +779,7 @@ def pagina_consulta_pontuacao(session):
             inicio_mes=inicio_mes,
             session=session
         )
+
 
 
 
