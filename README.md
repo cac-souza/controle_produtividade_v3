@@ -1,5 +1,5 @@
 # controle_produtividade_v3
-Versão finalizada em 27/08/2025
+Versão finalizada em 27/08/2025 nova atualização 
 
 # 📊 Painel de Produtividade e Metas
 
