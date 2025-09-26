@@ -1,4 +1,4 @@
-# visao_geral.py
+# visao_geral.py - 
 
 import pandas as pd
 import altair as alt
@@ -204,3 +204,4 @@ def pagina_visao_geral(session):
     col1.metric("Total Realizado", f"{total_ganhos:.0f} pts")
     col2.metric("Total Usado", f"{total_usados:.0f} pts")
     col3.metric("Saldo Atual", f"{saldo:.0f} pts", delta=f"{saldo:.0f}")
+
