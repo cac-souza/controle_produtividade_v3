@@ -11,7 +11,7 @@ def pagina_gerenciar_usuarios(session):
     usuario_id = st.session_state.usuario_id
     papel = st.session_state.papel.lower()
 
-    # 🔐 Controle de acesso
+    # 🔐 Controle de acesso - 
     if papel == "admin":
         query = session.query(Usuario).filter(Usuario.login != "admin")
     elif papel == "gestor":
@@ -150,3 +150,4 @@ def pagina_gerenciar_usuarios(session):
                         session.rollback()
                         st.error("❌ Não foi possível salvar as alterações. Verifique os dados e tente novamente.")
                         st.exception(e)
+
