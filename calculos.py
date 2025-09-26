@@ -1,4 +1,4 @@
-# calculos.py
+# calculos.py - 
 from datetime import datetime, timedelta
 
 META_DIARIA = 200
@@ -32,3 +32,4 @@ def calcular_expiracao(data_ponto, dias_validade=7):
     Retorna True se o ponto já expirou.
     """
     return datetime.now() > data_ponto + timedelta(days=dias_validade)
+
