@@ -1,4 +1,4 @@
-# relatorios.py
+# relatorios.py - 
 import pandas as pd
 from sqlalchemy import text
 from db import engine  # Usa a mesma conexão central definida no projeto
@@ -49,3 +49,4 @@ def obter_saldo_por_tarefa(usuario_id: int = None, mes: str = None) -> pd.DataFr
         df = df[df["mes"] == mes]
 
     return df
+
