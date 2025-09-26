@@ -12,7 +12,7 @@ def pagina_projecao_expiracao(session):
     exigir_login()
     st.title("📆 Projeção de Expiração de Pontos")
 
-    # 🔐 Seleção de usuário com controle de acesso
+    # 🔐 Seleção de usuário com controle de acesso - 
     nivel_acesso = st.session_state.get("papel", "usuario")
     usuario_logado = session.query(Usuario).get(st.session_state.usuario_id)
 
@@ -106,3 +106,4 @@ def pagina_projecao_expiracao(session):
     # Métrica total
     total = df["Pontos"].sum()
     st.metric("Total a expirar nos próximos meses", f"{total:.0f} pts")
+
