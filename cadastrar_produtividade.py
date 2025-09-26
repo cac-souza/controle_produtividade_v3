@@ -8,7 +8,7 @@ def pagina_cadastrar_produtividade(session):
     st.title("📝 Novo Registro de Produtividade")
     exigir_login()
 
-    # 🔄 Nível de acesso
+    # 🔄 Nível de acesso - 
     nivel_acesso = st.session_state.papel.lower()
 
     # 🔍 Buscar tarefas ativas
@@ -118,3 +118,4 @@ def pagina_cadastrar_produtividade(session):
             session.rollback()
             st.error("❌ Erro ao salvar registros.")
             st.exception(e)
+
