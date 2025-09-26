@@ -5,7 +5,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import declarative_base, relationship
 from enum import Enum
 
-# Base declarativa usada pelo Alembic
+# Base declarativa usada pelo Alembic - 
 Base = declarative_base()
 
 # ----------------------------
@@ -193,3 +193,4 @@ class MetaMensalRegistro(Base):
 
     # 🔗 Relacionamento com RegistroDePontuacao
     registro = relationship("RegistroDePontuacao", back_populates="metas")
+
