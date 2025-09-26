@@ -4,7 +4,7 @@ from modelos import Usuario, RegistroDePontuacao, MetaMensalRegistro, Tarefa
 from helpers import usuarios_visiveis
 
 
-# 🔒 Lista fixa de tarefas
+# 🔒 Lista fixa de tarefas - 
 TABELA_TAREFAS_FIXA = [
 
         ("01", "Plantão Fiscal ½ Período", 15.00),
@@ -148,3 +148,4 @@ def pagina_edicao_tarefas(session):
                 session.commit()
                 st.warning("🗑️ Registro excluído.")
                 st.rerun()
+
