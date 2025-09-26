@@ -7,7 +7,7 @@ def pagina_cadastro_usuario(session):
     st.title("👥 Cadastro de Novo Usuário")
     exigir_login()
 
-    # 🔐 Verificação de permissão
+    # 🔐 Verificação de permissão - 
     papel_usuario = (st.session_state.papel or "").strip().lower()
     if papel_usuario not in ["admin", "gestor", "lider", "chefe"]:
         st.warning("❌ Você não tem permissão para acessar esta funcionalidade.")
@@ -77,3 +77,4 @@ def pagina_cadastro_usuario(session):
             session.add(novo_usuario)
             session.commit()
             st.success(f"✅ Usuário '{login}' cadastrado com sucesso!")
+
