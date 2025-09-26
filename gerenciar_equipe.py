@@ -6,7 +6,7 @@ from auth import exigir_login
 def pagina_gerenciar_equipes(session):
     st.title("👥 Gerenciamento de Equipes")
 
-    # Limpa o campo antes de renderizar o widget
+    # Limpa o campo antes de renderizar o widget - 
     if st.session_state.get("limpar_input_nova_equipe", False):
         st.session_state.pop("input_nova_equipe", None)
         st.session_state["limpar_input_nova_equipe"] = False
@@ -87,3 +87,4 @@ def pagina_gerenciar_equipes(session):
                             st.rerun()
     else:
         st.info("Nenhuma equipe cadastrada ainda.")
+
