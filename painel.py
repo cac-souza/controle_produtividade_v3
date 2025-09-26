@@ -1,4 +1,4 @@
-# painel.py
+# painel.py - 
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -276,3 +276,4 @@ elif aba == "Perda de Pontos":
 # -------------------------------
 # FIM DO painel.py
 # -------------------------------
+
