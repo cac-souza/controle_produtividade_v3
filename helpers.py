@@ -1,4 +1,4 @@
-# helpers.py
+# helpers.py - 
 from modelos import Usuario
 
 def usuarios_visiveis(usuario_logado, session):
@@ -21,3 +21,4 @@ def usuarios_visiveis(usuario_logado, session):
     if usuario_logado not in visiveis:
         visiveis.append(usuario_logado)
     return visiveis
+
