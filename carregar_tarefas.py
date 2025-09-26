@@ -1,4 +1,4 @@
-# carregar_tarefas.py
+# carregar_tarefas.py - 
 
 """
 Módulo para sincronizar as tarefas padrão no banco de dados.
@@ -88,4 +88,5 @@ def carregar_tarefas_padrao():
 
 if __name__ == "__main__":
     carregar_tarefas_padrao()
+
 
